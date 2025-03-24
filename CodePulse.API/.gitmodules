@@ -1,0 +1,3 @@
+[submodule "CodePulse.API"]
+	path = CodePulse.API
+	url = https://github.com/QhorinElManco/Curso-Angular-and-ASP.NET-Core-REST-API

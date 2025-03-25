@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: codepulse_mssql
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "your_password"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - codepulse_net
+  
+  backend:
+    container_name: codepulse_api
+    build:
+      context: ./CodePulse.API
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - mssql
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=CodePulse;User Id=sa;Password=your_password;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - codepulse_net
+  
+  frontend:
+    container_name: codepulse_ui
+    build:
+      context: ./CodePulse.UI
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80" # mapeamos el puerto 80 interno del contenedor al 4200 en el host
+    depends_on:
+      - backend
+    networks:
+      - codepulse_net
+
+networks:
+  codepulse_net:
+
+volumes:
+  mssql_data:

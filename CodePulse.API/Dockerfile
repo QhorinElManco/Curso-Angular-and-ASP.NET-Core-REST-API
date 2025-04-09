@@ -1,18 +1,27 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5000
-EXPOSE 5001
+EXPOSE 8000
+ENV ASPNETCORE_URLS=http://+:8000
+RUN groupadd -g 2000 dotnet && useradd -m -u 2000 -g 2000 dotnet
+USER dotnet
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+ARG DOTNET_SKIP_POLICY_LOADING=true
 WORKDIR /src
-COPY *.csproj ./
-RUN dotnet restore --source https://api.nuget.org/v3/index.json
+COPY ["*.csproj", "./"]
+
+RUN dotnet restore "CodePulse.API.csproj"
 COPY . .
-WORKDIR "/src/CodePulse.API"
-RUN dotnet build -c Release -o /app/build
+RUN dotnet build "CodePulse.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+
+RUN ls /app/build
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "CodePulse.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
 
 FROM base AS final
 WORKDIR /app

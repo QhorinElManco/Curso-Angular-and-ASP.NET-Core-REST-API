@@ -1,0 +1,21 @@
+services:
+  codepulse-api:
+    build:
+      target: development
+      args:
+        - configuration=Debug
+    environment:
+      - ASPNETCORE__ENVIRONMENT=Development
+    volumes:
+      - ./CodePulse.API:/app
+    ports:
+      - "5001:8000"
+
+  codepulse-ui:
+    build:
+      target: development
+    volumes:
+      - ./CodePulse.UI:/app
+    ports:
+      - "4200:4200"
+    command: npm run start

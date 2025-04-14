@@ -16,7 +16,6 @@ services:
       - |
         /opt/mssql/bin/sqlservr & sleep 15s;
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -d master -i /scripts/seed-data.sql; wait
-    
     networks:
       - codepulse_network
   
@@ -24,6 +23,7 @@ services:
     build:
       context: CodePulse.API
       dockerfile: Dockerfile
+      target: production
       args:
         - configuration=Release
     environment:
@@ -35,18 +35,21 @@ services:
       - mssql
     networks:
       - codepulse_network
+    ports:
+      - "5000:8000"
 
 
-  frontend:
+  codepulse-ui:
     build:
       context: CodePulse.UI
       dockerfile: Dockerfile
+      target: production
     # ports:
     #   - 8080:8080
     depends_on:
       - codepulse-api
     networks:
-      - codepulse_network
+      - codepulse_network   
 
 networks:
   codepulse_network:

@@ -9,9 +9,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 ARG DOTNET_SKIP_POLICY_LOADING=true
 WORKDIR /src
-COPY ["*.csproj", "./"]
 
-RUN dotnet restore "CodePulse.API.csproj"
+#COPY ["*.csproj", "./"]
+#RUN dotnet restore "CodePulse.API.csproj"
 COPY . .
 RUN dotnet build "CodePulse.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
@@ -26,8 +26,8 @@ ENTRYPOINT ["dotnet", "CodePulse.API.dll"]
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS development
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
+#COPY *.csproj ./
+#RUN dotnet restore
 COPY . ./
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV DOTNET_WATCH_RELOAD_ON_SAVE=true

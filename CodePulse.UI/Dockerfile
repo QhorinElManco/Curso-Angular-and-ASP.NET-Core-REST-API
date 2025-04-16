@@ -17,7 +17,7 @@ CMD ["nginx", "-g", "daemon off;"]
 FROM node:22-alpine AS development
 WORKDIR /app
 COPY package*.json angular.json tsconfig.json ./
-RUN npm install -g @angular/cli && npm install
+RUN npm install
 COPY . ./
 EXPOSE 4200
 #CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "4200"]

@@ -18,4 +18,18 @@ public class CategoryRepository(ApplicationDbContext dbContext) : ICategoryRepos
         Category? category = await dbContext.Categories.FindAsync(id);
         return category;
     }
+
+    public async Task<Category?> UpdateAsync(Category newCategory)
+    {
+        Category? category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == newCategory.Id);
+
+        if (category != null)
+        {
+            dbContext.Entry(category).CurrentValues.SetValues(newCategory);
+            await dbContext.SaveChangesAsync();
+            return category;
+        }
+
+        return null;
+    }
 }

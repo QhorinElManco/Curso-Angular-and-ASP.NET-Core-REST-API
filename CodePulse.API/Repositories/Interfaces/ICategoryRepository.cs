@@ -6,4 +6,6 @@ public interface ICategoryRepository
 {
     Task<Category> CreateAsync(Category category);
     Task<Category?> GetByIdAsync(Guid id);
+
+    Task<Category?> UpdateAsync(Category category);
 }

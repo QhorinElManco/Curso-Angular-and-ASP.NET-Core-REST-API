@@ -23,7 +23,7 @@ public class CategoryController(ApplicationDbContext dbContext, ICategoryReposit
         return Created($"/api/categories/{category.Id}", category);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetCategory(Guid id)
     {
         Category? category = await categoryRepository.GetByIdAsync(id);
@@ -41,5 +41,34 @@ public class CategoryController(ApplicationDbContext dbContext, ICategoryReposit
         };
 
         return Ok(categoryDto);
+    }
+
+    [HttpPut("{id:Guid}")]
+    public async Task<IActionResult> UpdateCategory(
+        [FromRoute] Guid id,
+        [FromBody] UpdateCategoryRequestDto categoryDto
+    )
+    {
+        Category newCategory = new Category
+        {
+            Id = id,
+            Name = categoryDto.Name,
+            UrlHandle = categoryDto.UrlHandle
+        };
+
+        Category? categoryUpdated = await categoryRepository.UpdateAsync(newCategory);
+
+        if (categoryUpdated == null)
+        {
+            return NotFound();
+        }
+
+        CategoryDto categoryUpdatedDto = new CategoryDto
+        {
+            Name = categoryUpdated.Name,
+            UrlHandle = categoryUpdated.UrlHandle
+        };
+
+        return Ok(categoryUpdatedDto);
     }
 }

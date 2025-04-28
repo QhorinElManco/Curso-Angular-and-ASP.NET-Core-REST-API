@@ -1,4 +1,3 @@
-using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTOs;
 using CodePulse.API.Repositories.Interfaces;
@@ -8,7 +7,7 @@ namespace CodePulse.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController(ApplicationDbContext dbContext, ICategoryRepository categoryRepository) : ControllerBase
+public class CategoryController(ICategoryRepository categoryRepository) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)

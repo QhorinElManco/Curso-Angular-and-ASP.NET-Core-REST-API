@@ -12,12 +12,16 @@
         <th>Id</th>
         <th>Name</th>
         <th>Url Handle</th>
+        <th>Actions</th>
       </thead>
       <tbody>
       <tr *ngFor="let category of categories">
         <td>{{ category.id }}</td>
         <td>{{ category.name }}</td>
         <td>{{ category.urlHandle }}</td>
+        <td>
+          <a class="btn btn-light" [routerLink]="['/admin/categories', category.id]">Edit</a>
+        </td>
       </tr>
       </tbody>
     </table>

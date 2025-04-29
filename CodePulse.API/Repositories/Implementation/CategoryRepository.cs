@@ -16,21 +16,22 @@ public class CategoryRepository(ApplicationDbContext dbContext) : ICategoryRepos
 
     public async Task<Category?> GetByIdAsync(Guid id)
     {
-        Category? category = await dbContext.Categories.FindAsync(id);
-        return category;
+        return await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task<IEnumerable<Category>> GetAllAsync()
+    {
+        return await dbContext.Categories.ToListAsync();
     }
 
     public async Task<Category?> UpdateAsync(Category newCategory)
     {
-        Category? category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == newCategory.Id);
+        var category = await GetByIdAsync(newCategory.Id);
 
-        if (category != null)
-        {
-            dbContext.Entry(category).CurrentValues.SetValues(newCategory);
-            await dbContext.SaveChangesAsync();
-            return category;
-        }
+        if (category == null) return null;
 
-        return null;
+        dbContext.Entry(category).CurrentValues.SetValues(newCategory);
+        await dbContext.SaveChangesAsync();
+        return category;
     }
 }

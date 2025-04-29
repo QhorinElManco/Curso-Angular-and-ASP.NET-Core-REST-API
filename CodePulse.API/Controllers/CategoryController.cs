@@ -1,3 +1,4 @@
+using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTOs;
 using CodePulse.API.Repositories.Interfaces;
@@ -12,7 +13,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpPost]
     public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
     {
-        Category category = new Category
+        var category = new Category
         {
             Name = request.Name,
             UrlHandle = request.UrlHandle
@@ -25,14 +26,14 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetCategory(Guid id)
     {
-        Category? category = await categoryRepository.GetByIdAsync(id);
+        var category = await categoryRepository.GetByIdAsync(id);
 
         if (category == null)
         {
             return NotFound();
         }
 
-        CategoryDto categoryDto = new CategoryDto
+        var categoryDto = new CategoryDto
         {
             Id = category.Id,
             Name = category.Name,
@@ -42,28 +43,46 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
         return Ok(categoryDto);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetCategories()
+    {
+        IEnumerable<Category> categories = await categoryRepository.GetAllAsync();
+
+        var categoriesDto = categories.Select(category => new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                }
+            )
+            .ToList();
+
+        return Ok(categoriesDto);
+    }
+
     [HttpPut("{id:Guid}")]
     public async Task<IActionResult> UpdateCategory(
         [FromRoute] Guid id,
         [FromBody] UpdateCategoryRequestDto categoryDto
     )
     {
-        Category newCategory = new Category
+        var newCategory = new Category
         {
             Id = id,
             Name = categoryDto.Name,
             UrlHandle = categoryDto.UrlHandle
         };
 
-        Category? categoryUpdated = await categoryRepository.UpdateAsync(newCategory);
+        var categoryUpdated = await categoryRepository.UpdateAsync(newCategory);
 
         if (categoryUpdated == null)
         {
             return NotFound();
         }
 
-        CategoryDto categoryUpdatedDto = new CategoryDto
+        var categoryUpdatedDto = new CategoryDto
         {
+            Id = categoryUpdated.Id,
             Name = categoryUpdated.Name,
             UrlHandle = categoryUpdated.UrlHandle
         };

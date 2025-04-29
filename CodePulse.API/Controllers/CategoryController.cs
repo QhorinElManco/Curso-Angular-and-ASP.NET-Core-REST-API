@@ -1,4 +1,3 @@
-using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTOs;
 using CodePulse.API.Repositories.Interfaces;
@@ -88,5 +87,18 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
         };
 
         return Ok(categoryUpdatedDto);
+    }
+
+    [HttpDelete("{id:Guid}")]
+    public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
+    {
+        var isCategoryDeleted = await categoryRepository.DeleteAsync(id);
+
+        if (isCategoryDeleted == null)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }

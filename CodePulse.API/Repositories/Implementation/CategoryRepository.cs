@@ -34,4 +34,15 @@ public class CategoryRepository(ApplicationDbContext dbContext) : ICategoryRepos
         await dbContext.SaveChangesAsync();
         return category;
     }
+
+    public async Task<Category?> DeleteAsync(Guid id)
+    {
+        var category = await GetByIdAsync(id);
+
+        if (category == null) return null;
+
+        dbContext.Categories.Remove(category);
+        await dbContext.SaveChangesAsync();
+        return category;
+    }
 }

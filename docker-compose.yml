@@ -1,0 +1,59 @@
+services:
+  mssql:
+    container_name: mssql
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./CodePulse.API/SqlScripts:/scripts
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/mssql/bin/sqlservr & sleep 15s;
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -d master -i /scripts/seed-data.sql; wait
+    networks:
+      - codepulse_network
+  
+  codepulse-api:
+    build:
+      context: CodePulse.API
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - configuration=Release
+    environment:
+      - ASPNETCORE__ENVIRONMENT=${ENVIRONMENT}
+    #    ports:
+    #      - "5000:5000"
+    #      - "5001:5001"
+    depends_on:
+      - mssql
+    networks:
+      - codepulse_network
+    ports:
+      - "5000:8000"
+
+
+  codepulse-ui:
+    build:
+      context: CodePulse.UI
+      dockerfile: Dockerfile
+      target: production
+    # ports:
+    #   - 8080:8080
+    depends_on:
+      - codepulse-api
+    networks:
+      - codepulse_network   
+
+networks:
+  codepulse_network:
+    driver: bridge
+
+volumes:
+  mssql_data:

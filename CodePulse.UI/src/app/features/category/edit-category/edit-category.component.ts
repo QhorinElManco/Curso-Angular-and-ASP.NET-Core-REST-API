@@ -21,6 +21,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   category?: Category;
   paramsSubscrition?: Subscription;
   editCategorySubscription?: Subscription;
+  deleteCategorySubscription?: Subscription;
 
   constructor(
     private categoryService: CategoryService,
@@ -66,8 +67,18 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
 
+  onDelete() {
+    this.deleteCategorySubscription = this.categoryService.deleteCategory(this.id!).subscribe({
+      next: () => this.router.navigateByUrl("/admin/categories"),
+      error: (error) => console.log(error)
+    })
+  }
+
+
   ngOnDestroy() {
     this.paramsSubscrition?.unsubscribe();
     this.editCategorySubscription?.unsubscribe();
+    this.deleteCategorySubscription?.unsubscribe();
   }
+
 }

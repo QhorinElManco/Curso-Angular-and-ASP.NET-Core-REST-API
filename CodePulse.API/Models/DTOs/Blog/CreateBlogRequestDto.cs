@@ -10,6 +10,5 @@ public class CreateBlogRequestDto
     public DateTime PublishedOn { get; set; }
     public string Author { get; set; }
     public bool IsPublished { get; set; }
-    
     public Guid[] Categories { get; set; }
 }

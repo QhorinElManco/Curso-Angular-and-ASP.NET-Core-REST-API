@@ -28,10 +28,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     {
         var category = await categoryRepository.GetByIdAsync(id);
 
-        if (category == null)
-        {
-            return NotFound();
-        }
+        if (category == null) return NotFound();
 
         var categoryDto = new CategoryDto
         {
@@ -46,7 +43,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     [HttpGet]
     public async Task<IActionResult> GetCategories()
     {
-        IEnumerable<Category> categories = await categoryRepository.GetAllAsync();
+        var categories = await categoryRepository.GetAllAsync();
 
         var categoriesDto = categories.Select(category => new CategoryDto
                 {
@@ -75,10 +72,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
 
         var categoryUpdated = await categoryRepository.UpdateAsync(newCategory);
 
-        if (categoryUpdated == null)
-        {
-            return NotFound();
-        }
+        if (categoryUpdated == null) return NotFound();
 
         var categoryUpdatedDto = new CategoryDto
         {
@@ -95,10 +89,7 @@ public class CategoryController(ICategoryRepository categoryRepository) : Contro
     {
         var isCategoryDeleted = await categoryRepository.DeleteAsync(id);
 
-        if (isCategoryDeleted == null)
-        {
-            return NotFound();
-        }
+        if (isCategoryDeleted == null) return NotFound();
 
         return NoContent();
     }

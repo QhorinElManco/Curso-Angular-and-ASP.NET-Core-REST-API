@@ -33,10 +33,7 @@ public class BlogPostController(
         {
             var category = await categoryRepository.GetByIdAsync(categoryId);
 
-            if (category == null)
-            {
-                return BadRequest($"Category with id {categoryId} not found.");
-            }
+            if (category == null) return BadRequest($"Category with id {categoryId} not found.");
 
             blogPost.Categories.Add(category);
         }
@@ -72,10 +69,7 @@ public class BlogPostController(
     {
         var blogPost = await blogRepository.GetByIdAsync(id);
 
-        if (blogPost == null)
-        {
-            return NotFound();
-        }
+        if (blogPost == null) return NotFound();
 
         var blogDto = new BlogDto
         {

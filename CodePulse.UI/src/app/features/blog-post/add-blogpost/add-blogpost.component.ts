@@ -44,7 +44,7 @@ export class AddBlogpostComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.categories$ = this.categoryService.getAllCategories();
+    this.categories$ = this.categoryService.getAll();
   }
 
 

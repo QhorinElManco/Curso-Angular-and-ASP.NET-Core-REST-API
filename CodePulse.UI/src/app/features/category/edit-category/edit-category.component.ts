@@ -36,7 +36,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
         next: (params) => {
           this.id = params.get('id');
           if (this.id) {
-            this.categoryService.getCategoryById(this.id)
+            this.categoryService.getById(this.id)
               .subscribe(
                 {
                   next: (category) => {
@@ -59,7 +59,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     };
 
     if (this.id) {
-      this.editCategorySubscription = this.categoryService.updateCategory(this.id, updateCategoryRequest).subscribe({
+      this.editCategorySubscription = this.categoryService.update(this.id, updateCategoryRequest).subscribe({
         next: () => this.router.navigateByUrl("/admin/categories"),
         error: (error) => console.log(error)
       });
@@ -68,7 +68,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 
 
   onDelete() {
-    this.deleteCategorySubscription = this.categoryService.deleteCategory(this.id!).subscribe({
+    this.deleteCategorySubscription = this.categoryService.delete(this.id!).subscribe({
       next: () => this.router.navigateByUrl("/admin/categories"),
       error: (error) => console.log(error)
     })

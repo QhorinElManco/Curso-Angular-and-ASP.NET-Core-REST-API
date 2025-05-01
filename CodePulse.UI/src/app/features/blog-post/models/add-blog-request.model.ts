@@ -1,3 +1,5 @@
+import {Category} from '../../category/models/category.model';
+
 export interface AddBlogRequestModel {
   title: string;
   shortDescription: string;
@@ -7,4 +9,5 @@ export interface AddBlogRequestModel {
   publishedOn: Date;
   author: string;
   isPublished: boolean;
+  categories: Category["id"][]
 }

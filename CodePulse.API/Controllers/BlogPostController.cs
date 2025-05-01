@@ -1,5 +1,6 @@
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTOs.Blog;
+using CodePulse.API.Models.DTOs.Category;
 using CodePulse.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,10 @@ namespace CodePulse.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BlogPostController(IBlogPostRepository repository) : ControllerBase
+public class BlogPostController(
+    IBlogPostRepository blogRepository,
+    ICategoryRepository categoryRepository
+) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateBlogPost([FromBody] CreateBlogRequestDto request)
@@ -21,10 +25,30 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
             UrlHandle = request.UrlHandle,
             PublishedOn = request.PublishedOn,
             Author = request.Author,
-            IsPublished = request.IsPublished
+            IsPublished = request.IsPublished,
+            Categories = new List<Category>()
         };
 
-        blogPost = await repository.CreateAsync(blogPost);
+        foreach (var categoryId in request.Categories)
+        {
+            var category = await categoryRepository.GetByIdAsync(categoryId);
+
+            if (category == null)
+            {
+                return BadRequest($"Category with id {categoryId} not found.");
+            }
+
+            blogPost.Categories.Add(category);
+        }
+
+        blogPost = await blogRepository.CreateAsync(blogPost);
+
+        var categoriesDto = blogPost.Categories.Select(c => new CategoryDto
+        {
+            Id = c.Id,
+            Name = c.Name,
+            UrlHandle = c.UrlHandle
+        }).ToList();
 
         var blogPostDto = new BlogDto
         {
@@ -36,7 +60,8 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
             UrlHandle = blogPost.UrlHandle,
             PublishedOn = blogPost.PublishedOn,
             Author = blogPost.Author,
-            IsPublished = blogPost.IsPublished
+            IsPublished = blogPost.IsPublished,
+            Categories = categoriesDto
         };
 
         return Created($"/api/blogpost/{blogPostDto.Id}", blogPostDto);
@@ -45,7 +70,7 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetBlogPost(Guid id)
     {
-        var blogPost = await repository.GetByIdAsync(id);
+        var blogPost = await blogRepository.GetByIdAsync(id);
 
         if (blogPost == null)
         {
@@ -62,7 +87,13 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
             UrlHandle = blogPost.UrlHandle,
             PublishedOn = blogPost.PublishedOn,
             Author = blogPost.Author,
-            IsPublished = blogPost.IsPublished
+            IsPublished = blogPost.IsPublished,
+            Categories = blogPost.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                UrlHandle = c.UrlHandle
+            }).ToList()
         };
 
         return Ok(blogDto);
@@ -71,7 +102,7 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetBlogPosts()
     {
-        var blogPosts = await repository.GetAllAsync();
+        var blogPosts = await blogRepository.GetAllAsync();
 
         var blogsDto = blogPosts.Select(blogPost => new BlogDto
             {
@@ -82,7 +113,13 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
                 UrlHandle = blogPost.UrlHandle,
                 PublishedOn = blogPost.PublishedOn,
                 Author = blogPost.Author,
-                IsPublished = blogPost.IsPublished
+                IsPublished = blogPost.IsPublished,
+                Categories = blogPost.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
+                }).ToList()
             })
             .ToList();
 

@@ -16,12 +16,16 @@ public class BlogPostRepository(ApplicationDbContext dbContext) : IBlogPostRepos
 
     public async Task<BlogPost?> GetByIdAsync(Guid id)
     {
-        return await dbContext.BlogPosts.FirstOrDefaultAsync(c => c.Id == id);
+        return await dbContext.BlogPosts
+            .Include(b => b.Categories)
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<IEnumerable<BlogPost>> GetAllAsync()
     {
-        return await dbContext.BlogPosts.ToListAsync();
+        return await dbContext.BlogPosts
+            .Include(b => b.Categories)
+            .ToListAsync();
     }
 
     public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)

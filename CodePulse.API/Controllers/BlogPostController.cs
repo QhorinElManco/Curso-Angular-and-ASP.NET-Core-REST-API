@@ -73,11 +73,7 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
     {
         var blogPosts = await repository.GetAllAsync();
 
-        var blogsDto = new List<BlogDto>();
-
-        foreach (var blogPost in blogPosts)
-        {
-            var dto = new BlogDto
+        var blogsDto = blogPosts.Select(blogPost => new BlogDto
             {
                 Title = blogPost.Title,
                 ShortDescription = blogPost.ShortDescription,
@@ -87,10 +83,8 @@ public class BlogPostController(IBlogPostRepository repository) : ControllerBase
                 PublishedOn = blogPost.PublishedOn,
                 Author = blogPost.Author,
                 IsPublished = blogPost.IsPublished
-            };
-
-            blogsDto.Add(dto);
-        }
+            })
+            .ToList();
 
         return Ok(blogsDto);
     }

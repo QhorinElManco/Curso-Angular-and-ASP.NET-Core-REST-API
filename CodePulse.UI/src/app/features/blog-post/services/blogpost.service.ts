@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../../environments/environment';
+import {environment} from '@env/environment';
 import {HttpClient} from '@angular/common/http';
-import {AddBlogRequestModel} from '../models/add-blog-request.model';
-import {BlogPost} from '../models/blogpost.model';
+import {AddBlogRequestModel} from '@blogpost/models/add-blog-request.model';
+import {BlogPost} from '@blogpost/models/blogpost.model';
 import {Observable} from 'rxjs';
 
 @Injectable({

@@ -3,11 +3,11 @@ import {FormsModule} from '@angular/forms';
 import {AddBlogRequestModel} from '../models/add-blog-request.model';
 import {CommonModule, DatePipe} from '@angular/common';
 import {Observable, Subscription} from 'rxjs';
-import {BlogpostService} from '../services/blogpost.service';
+import {BlogpostService} from '@blogpost/services/blogpost.service';
 import {Router} from '@angular/router';
 import {MarkdownComponent} from 'ngx-markdown';
-import {CategoryService} from '../../category/services/category.service';
-import {Category} from '../../category/models/category.model';
+import {CategoryService} from '@category/services/category.service';
+import {Category} from '@category/models/category.model';
 
 @Component({
   selector: 'app-add-blogpost',

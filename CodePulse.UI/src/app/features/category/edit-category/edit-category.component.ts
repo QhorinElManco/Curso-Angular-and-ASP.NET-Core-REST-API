@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CategoryService} from '../services/category.service';
+import {CategoryService} from '@category/services/category.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Category} from '../models/category.model';
-import {UpdateCategoryRequestModel} from '../models/update-category-request.model';
+import {Category} from '@category/models/category.model';
+import {UpdateCategoryRequestModel} from '@category/models/update-category-request.model';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 

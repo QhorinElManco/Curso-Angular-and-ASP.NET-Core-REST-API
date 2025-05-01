@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryService} from '../services/category.service';
-import {Category} from '../models/category.model';
+import {CategoryService} from '@category/services/category.service';
+import {Category} from '@category/models/category.model';
 import {CommonModule} from '@angular/common';
 import {Observable} from 'rxjs';
 import {RouterLink} from '@angular/router';

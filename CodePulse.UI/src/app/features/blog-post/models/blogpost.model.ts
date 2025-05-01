@@ -1,11 +1,11 @@
 export interface BlogPost {
-  Id: string;
-  Title: string;
-  ShortDescription: string;
-  Content: string;
-  FeaturedImageUrl: string;
-  UrlHandle: string;
-  PublishedOn: Date;
-  Author: string;
-  IsPublished: boolean;
+  id: string;
+  title: string;
+  shortDescription: string;
+  content: string;
+  featuredImageUrl: string;
+  urlHandle: string;
+  publishedOn: Date;
+  author: string;
+  isPublished: boolean;
 }

@@ -3,14 +3,13 @@ import {RouterLink} from '@angular/router';
 import {BlogpostService} from '../services/blogpost.service';
 import {Observable} from 'rxjs';
 import {BlogPost} from '../models/blogpost.model';
-import {AsyncPipe, JsonPipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-blogpost-list',
   imports: [
     RouterLink,
-    AsyncPipe,
-    JsonPipe
+    CommonModule
   ],
   templateUrl: './blogpost-list.component.html',
   styleUrl: './blogpost-list.component.css'

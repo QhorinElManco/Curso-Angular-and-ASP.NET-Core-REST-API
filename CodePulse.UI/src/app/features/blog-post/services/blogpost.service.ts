@@ -19,7 +19,7 @@ export class BlogpostService {
     return this.http.post<BlogPost>(this.urlBlogPosts, blogpost);
   }
 
-  getById(id: BlogPost["Id"]): Observable<BlogPost> {
+  getById(id: BlogPost["id"]): Observable<BlogPost> {
     return this.http.get<BlogPost>(`${this.urlBlogPosts}/${id}`);
   }
 

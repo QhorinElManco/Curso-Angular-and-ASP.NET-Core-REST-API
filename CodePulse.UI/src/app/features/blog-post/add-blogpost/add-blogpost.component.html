@@ -6,32 +6,43 @@
       <div class="mt-3">
         <label class="form-label">Title</label>
         <input
-          type="text"
+          [(ngModel)]="model.title"
           class="form-control"
-          name="title"
           id="title"
-                  [(ngModel)]="model.title"
+          name="title"
+          type="text"
         >
       </div>
 
       <div class="mt-3">
         <label class="form-label">Short description</label>
         <input
-          type="text"
+          [(ngModel)]="model.shortDescription"
           class="form-control"
-          name="shortDescription"
           id="shortDescription"
-                  [(ngModel)]="model.shortDescription"
+          name="shortDescription"
+          type="text"
+        >
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label">Url handle</label>
+        <input
+          [(ngModel)]="model.urlHandle"
+          class="form-control"
+          id="urlHandle"
+          name="urlHandle"
+          type="text"
         >
       </div>
 
       <div class="mt-3">
         <label class="form-label">Content</label>
         <textarea
-          class="form-control"
-          name="content"
-          id="content"
           [(ngModel)]="model.content"
+          class="form-control"
+          id="content"
+          name="content"
         >
           </textarea>
       </div>
@@ -39,45 +50,54 @@
       <div class="mt-3">
         <label class="form-label">Featured Image Url</label>
         <input
-          type="text"
+          [(ngModel)]="model.featuredImageUrl"
           class="form-control"
-          name="featuredImageUrl"
           id="featuredImageUrl"
-                  [(ngModel)]="model.featuredImageUrl"
+          name="featuredImageUrl"
+          type="text"
         >
       </div>
 
       <div class="mt-3">
         <label class="form-label">Published date</label>
         <input
-          type="date"
+          [ngModel]="model.publishedOn | date: 'yyyy-MM-dd'"
           class="form-control"
-          name="publishedDate"
           id="publishedDate"
-                  [(ngModel)]="model.publishedDate"
+          name="publishedDate"
+          value="{{model.publishedOn}}"
+          (ngModelChange)="model.publishedOn = $event"
+          type="date"
         >
       </div>
 
       <div class="mt-3">
         <label class="form-label">Author</label>
         <input
-          type="text"
+          [(ngModel)]="model.author"
           class="form-control"
-          name="author"
           id="author"
-                  [(ngModel)]="model.author"
+          name="author"
+          type="text"
         >
       </div>
 
       <div class="form-check mt-3">
-        <input class="form-check-input" type="checkbox" id="isVisible">
+        <input
+          [(ngModel)]="model.isPublished"
+          [ngModelOptions]="{standalone: true}"
+          class="form-check-input"
+          id="isVisible"
+          name="isVisible"
+          type="checkbox"
+        >
         <label class="form-check-label" for="isVisible">
           Is visible?
         </label>
       </div>
 
       <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-primary" type="submit">Save</button>
       </div>
     </div>
   </form>

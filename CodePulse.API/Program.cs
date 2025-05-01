@@ -15,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => { options.UseSqlServer(builder.Configuration.GetConnectionString("CodePulseConnectionString")); });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 builder.Services.AddCors(options =>
 {

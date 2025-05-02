@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {AddBlogRequestModel} from '@blogpost/models/add-blog-request.model';
 import {BlogPost} from '@blogpost/models/blogpost.model';
 import {Observable} from 'rxjs';
+import {UpdateBlogRequestModel} from '@blogpost/models/update-blog-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,13 @@ export class BlogpostService {
 
   getAll(): Observable<BlogPost[]> {
     return this.http.get<BlogPost[]>(this.urlBlogPosts);
+  }
+
+  update(id: BlogPost["id"], blogpost: UpdateBlogRequestModel): Observable<BlogPost> {
+    return this.http.patch<BlogPost>(`${this.urlBlogPosts}/${id}`, blogpost);
+  }
+
+  delete(id: BlogPost["id"]): Observable<BlogPost> {
+    return this.http.delete<BlogPost>(`${this.urlBlogPosts}/${id}`);
   }
 }

@@ -1,0 +1,143 @@
+<div class="container">
+  <h1 class="mt-3">Add Blog Post</h1>
+
+  <ng-container *ngIf="blogpost; else notFound">
+    <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+      <div class="mt-2">
+        <div class="mt-3">
+          <label class="form-label">Title</label>
+          <input
+            [(ngModel)]="blogpost.title"
+            class="form-control"
+            id="title"
+            name="title"
+            type="text"
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Short description</label>
+          <input
+            [(ngModel)]="blogpost.shortDescription"
+            class="form-control"
+            id="shortDescription"
+            name="shortDescription"
+            type="text"
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Url handle</label>
+          <input
+            [(ngModel)]="blogpost.urlHandle"
+            class="form-control"
+            id="urlHandle"
+            name="urlHandle"
+            type="text"
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Content</label>
+          <div class="d-flex flex-row">
+            <div class="col-6 p-2">
+            <textarea
+              [(ngModel)]="blogpost.content"
+              class="form-control"
+              id="content"
+              name="content"
+              style="height: 350px; max-height: 350px;"
+            >
+              </textarea>
+            </div>
+
+            <div class="col-6 p-2" style="max-height: 350px; overflow-y: scroll;">
+              <markdown [data]="blogpost.content">
+
+              </markdown>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Featured Image Url</label>
+          <ng-container *ngIf="blogpost.featuredImageUrl">
+            <div>
+              <img [src]="blogpost.featuredImageUrl" alt="Preview image" class="my-2" height="100">
+            </div>
+          </ng-container>
+          <input
+            [(ngModel)]="blogpost.featuredImageUrl"
+            class="form-control"
+            id="featuredImageUrl"
+            name="featuredImageUrl"
+            type="text"
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Published date</label>
+          <input
+            [ngModel]="blogpost.publishedOn | date: 'yyyy-MM-dd'"
+            class="form-control"
+            id="publishedDate"
+            name="publishedDate"
+            type="date"
+            value="{{blogpost.publishedOn}}"
+            readonly
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Author</label>
+          <input
+            [(ngModel)]="blogpost.author"
+            class="form-control"
+            id="author"
+            name="author"
+            type="text"
+          >
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Categories</label>
+          <select
+            [(ngModel)]="selectedCategories"
+            class="form-select"
+            id="categories"
+            multiple
+            name="categories"
+          >
+<!--            (ngModelChange) = "onCategoriesChange($event)"-->
+            <option *ngFor="let category of categories$ | async" [ngValue]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-check mt-3">
+          <input
+            [(ngModel)]="blogpost.isPublished"
+            class="form-check-input"
+            id="isVisible"
+            name="isVisible"
+            type="checkbox"
+          >
+          <label class="form-check-label" for="isVisible">
+            Is visible?
+          </label>
+        </div>
+
+        <div class="mt-3 d-flex">
+          <button class="btn btn-primary" type="submit">Save changes</button>
+          <button class="btn btn-danger ms-3" type="button" (click)="onDelete()">Delete</button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-template #notFound>
+    <h1>Blog post not found</h1>
+  </ng-template>
+
+</div>

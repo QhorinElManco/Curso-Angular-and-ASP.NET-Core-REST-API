@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {BlogpostService} from '@blogpost/services/blogpost.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MarkdownComponent} from 'ngx-markdown';
 import {Category} from '@category/models/category.model';
@@ -13,12 +13,9 @@ import {BlogPost} from '@blogpost/models/blogpost.model';
 @Component({
   selector: 'app-edit-blogpost',
   imports: [
-    AsyncPipe,
-    DatePipe,
+    CommonModule,
     FormsModule,
     MarkdownComponent,
-    NgForOf,
-    NgIf,
     ReactiveFormsModule
   ],
   templateUrl: './edit-blogpost.component.html',
@@ -27,7 +24,7 @@ import {BlogPost} from '@blogpost/models/blogpost.model';
 export class EditBlogpostComponent implements OnInit, OnDestroy {
   id: string | null = null;
   blogpost?: BlogPost;
-  paramsSubscrition?: Subscription;
+  routeSubscription?: Subscription;
   editPostSubscription?: Subscription;
   deletePostSubscription?: Subscription;
   categories$: Observable<Category[]> = new Observable<Category[]>();
@@ -43,17 +40,19 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.paramsSubscrition = this.route.paramMap.subscribe(
+    this.categories$ = this.categoryService.getAll();
+
+    this.routeSubscription = this.route.paramMap.subscribe(
       {
         next: (params) => {
           this.id = params.get('id');
+
           if (this.id) {
             this.blogpostService.getById(this.id)
               .subscribe(
                 {
                   next: (blog) => {
                     this.blogpost = blog;
-                    this.categories$ = this.categoryService.getAll();
                     this.selectedCategories = blog.categories.map(category => category.id);
                   },
                   error: (error) => console.log(error)
@@ -66,19 +65,20 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
   }
 
   onFormSubmit(): void {
-    const updateBlogRequest: UpdateBlogRequestModel = {
-      author: this.blogpost?.author ?? "",
-      content: this.blogpost?.content ?? "",
-      featuredImageUrl: this.blogpost?.featuredImageUrl ?? "",
-      isPublished: this.blogpost?.isPublished ?? false,
-      publishedOn: this.blogpost?.publishedOn ?? new Date(),
-      shortDescription: this.blogpost?.shortDescription ?? "",
-      title: this.blogpost?.title ?? "",
-      urlHandle: this.blogpost?.urlHandle ?? "",
-      categories: this.selectedCategories
-    }
-
     if (this.id && this.blogpost) {
+
+      const updateBlogRequest: UpdateBlogRequestModel = {
+        author: this.blogpost?.author,
+        content: this.blogpost?.content,
+        featuredImageUrl: this.blogpost?.featuredImageUrl,
+        isPublished: this.blogpost?.isPublished,
+        publishedOn: this.blogpost?.publishedOn,
+        shortDescription: this.blogpost?.shortDescription,
+        title: this.blogpost?.title,
+        urlHandle: this.blogpost?.urlHandle,
+        categories: this.selectedCategories
+      }
+
       this.editPostSubscription = this.blogpostService.update(this.id, updateBlogRequest).subscribe({
         next: () => this.router.navigateByUrl("/admin/blogposts"),
         error: (error) => console.log(error)
@@ -94,12 +94,9 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.paramsSubscrition?.unsubscribe();
+    this.routeSubscription?.unsubscribe();
     this.editPostSubscription?.unsubscribe();
     this.deletePostSubscription?.unsubscribe();
   }
 
-  onCategoriesChange($event: Category["id"][]) {
-    this.selectedCategories = $event;
-  }
 }

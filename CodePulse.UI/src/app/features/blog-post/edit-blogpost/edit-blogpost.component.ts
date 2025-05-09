@@ -9,6 +9,7 @@ import {Category} from '@category/models/category.model';
 import {CategoryService} from '@category/services/category.service';
 import {UpdateBlogRequestModel} from '@blogpost/models/update-blog-request.model';
 import {BlogPost} from '@blogpost/models/blogpost.model';
+import {ImageSelectorComponent} from '@shared/components/image-selector/image-selector.component';
 
 @Component({
   selector: 'app-edit-blogpost',
@@ -16,7 +17,8 @@ import {BlogPost} from '@blogpost/models/blogpost.model';
     CommonModule,
     FormsModule,
     MarkdownComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ImageSelectorComponent
   ],
   templateUrl: './edit-blogpost.component.html',
   styleUrl: './edit-blogpost.component.css'

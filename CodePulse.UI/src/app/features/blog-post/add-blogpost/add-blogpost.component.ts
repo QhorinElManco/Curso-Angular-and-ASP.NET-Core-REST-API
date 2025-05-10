@@ -8,6 +8,8 @@ import {Router} from '@angular/router';
 import {MarkdownComponent} from 'ngx-markdown';
 import {CategoryService} from '@category/services/category.service';
 import {Category} from '@category/models/category.model';
+import {ImageSelectorComponent} from '@shared/components/image-selector/image-selector.component';
+import {ImageService} from '@shared/components/image-selector/image.service';
 
 @Component({
   selector: 'app-add-blogpost',
@@ -15,19 +17,24 @@ import {Category} from '@category/models/category.model';
     FormsModule,
     DatePipe,
     MarkdownComponent,
-    CommonModule
+    CommonModule,
+    ImageSelectorComponent
   ],
   templateUrl: './add-blogpost.component.html',
   styleUrl: './add-blogpost.component.css'
 })
 export class AddBlogpostComponent implements OnDestroy, OnInit {
   model: AddBlogRequestModel;
-  private addBlogpostSubscription?: Subscription;
   categories$: Observable<Category[]> = new Observable<Category[]>();
+  isImageSelectorOpen: boolean = false;
+
+  private addBlogpostSubscription?: Subscription;
+  private imageSelectorSubscription?: Subscription;
 
   constructor(
     private blogService: BlogpostService,
     private categoryService: CategoryService,
+    private imageService: ImageService,
     private router: Router
   ) {
     this.model = {
@@ -45,6 +52,12 @@ export class AddBlogpostComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.categories$ = this.categoryService.getAll();
+    this.imageSelectorSubscription = this.imageService.onSelectImage().subscribe({
+      next: (image) => {
+        this.model.featuredImageUrl = image.url;
+        this.closeImageSelector();
+      }
+    })
   }
 
 
@@ -55,8 +68,17 @@ export class AddBlogpostComponent implements OnDestroy, OnInit {
     })
   }
 
-  ngOnDestroy(): void {
-    this.addBlogpostSubscription?.unsubscribe();
+
+  closeImageSelector() {
+    this.isImageSelectorOpen = false;
   }
 
+  openImageSelector() {
+    this.isImageSelectorOpen = true;
+  }
+
+  ngOnDestroy(): void {
+    this.addBlogpostSubscription?.unsubscribe();
+    this.imageSelectorSubscription?.unsubscribe();
+  }
 }

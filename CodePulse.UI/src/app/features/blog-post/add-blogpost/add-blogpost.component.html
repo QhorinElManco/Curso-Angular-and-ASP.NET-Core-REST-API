@@ -59,7 +59,12 @@
       </div>
 
       <div class="mt-3">
-        <label class="form-label">Featured Image Url</label>
+        <label class="form-label">
+          Featured Image Url
+          <button (click)="openImageSelector()" class="btn btn-dark" type="button">
+            Select image
+          </button>
+        </label>
         <ng-container *ngIf="model.featuredImageUrl">
           <div>
             <img [src]="model.featuredImageUrl" alt="Preview image" class="my-2" height="100">
@@ -125,5 +130,16 @@
       </div>
     </div>
   </form>
+</div>
 
+<div [ngClass]="{'d-block': isImageSelectorOpen, 'd-none': !isImageSelectorOpen}" class="images-container-modal">
+  <button
+    (click)="closeImageSelector()"
+    class="btn btn-light"
+    style="position: fixed; top: 10px; right: 10px"
+    type="button"
+  >
+    X
+  </button>
+  <app-image-selector></app-image-selector>
 </div>

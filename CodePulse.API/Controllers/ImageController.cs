@@ -19,10 +19,7 @@ public class ImageController(IImageRepository imageRepository) : ControllerBase
     {
         ValidateFileToUpload(file);
 
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var blogImage = new BlogImage
         {
@@ -70,13 +67,9 @@ public class ImageController(IImageRepository imageRepository) : ControllerBase
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
 
         if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
-        {
             ModelState.AddModelError("file", "Unsupported file type.");
-        }
 
         if (file.Length > 10485760)
-        {
             ModelState.AddModelError("file", "File size is too large. The maximum file size is 10MB.");
-        }
     }
 }

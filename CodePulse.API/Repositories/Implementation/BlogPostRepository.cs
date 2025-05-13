@@ -49,4 +49,9 @@ public class BlogPostRepository(ApplicationDbContext dbContext) : IBlogPostRepos
         await dbContext.SaveChangesAsync();
         return blogPost;
     }
+
+    public Task<BlogPost?> GetByUrlAsync(string urlHandle)
+    {
+        return dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+    }
 }

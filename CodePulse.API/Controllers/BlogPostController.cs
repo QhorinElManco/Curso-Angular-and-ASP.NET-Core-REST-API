@@ -187,4 +187,33 @@ public class BlogPostController(
 
         return NoContent();
     }
+
+    [HttpGet("{url}")]
+    public async Task<IActionResult> GetBlogPost(string url)
+    {
+        var blogPost = await blogRepository.GetByUrlAsync(url);
+
+        if (blogPost == null) return NotFound();
+
+        var blogDto = new BlogDto
+        {
+            Id = blogPost.Id,
+            Title = blogPost.Title,
+            ShortDescription = blogPost.ShortDescription,
+            Content = blogPost.Content,
+            FeaturedImageUrl = blogPost.FeaturedImageUrl,
+            UrlHandle = blogPost.UrlHandle,
+            PublishedOn = blogPost.PublishedOn,
+            Author = blogPost.Author,
+            IsPublished = blogPost.IsPublished,
+            Categories = blogPost.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                UrlHandle = c.UrlHandle
+            }).ToList()
+        };
+
+        return Ok(blogDto);
+    }
 }

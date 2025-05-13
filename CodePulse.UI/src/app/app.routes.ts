@@ -5,8 +5,14 @@ import {BlogpostListComponent} from '@blogpost/blogpost-list/blogpost-list.compo
 import {AddBlogpostComponent} from '@blogpost/add-blogpost/add-blogpost.component';
 import {EditCategoryComponent} from '@category/edit-category/edit-category.component';
 import {EditBlogpostComponent} from '@blogpost/edit-blogpost/edit-blogpost.component';
+import {HomeComponent} from '@features/public/home/home.component';
+import {BlogDetailsComponent} from '@features/public/blog-detail/blog-details.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent
+  },
   {
     path: "admin/categories",
     component: CategoryListComponent
@@ -30,5 +36,9 @@ export const routes: Routes = [
   {
     path: 'admin/blogposts/:id',
     component: EditBlogpostComponent
+  },
+  {
+    path: 'blog/:url',
+    component: BlogDetailsComponent
   }
 ];

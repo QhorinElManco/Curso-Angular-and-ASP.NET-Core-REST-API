@@ -35,4 +35,8 @@ export class BlogpostService {
   delete(id: BlogPost["id"]): Observable<BlogPost> {
     return this.http.delete<BlogPost>(`${this.urlBlogPosts}/${id}`);
   }
+
+  getByUrl(url: string): Observable<BlogPost> {
+    return this.http.get<BlogPost>(`${this.urlBlogPosts}/${url}`);
+  }
 }

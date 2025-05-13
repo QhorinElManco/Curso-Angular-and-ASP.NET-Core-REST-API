@@ -33,7 +33,7 @@
           {{ blogPost.isPublished }}
         </td>
         <td>
-          <a class="btn btn-light" [routerLink]="['/admin/blogposts', blogPost.id]">Edit</a>
+          <a [routerLink]="['/admin/blogposts', blogPost.id]" class="btn btn-light">Edit</a>
         </td>
       </tr>
       </tbody>

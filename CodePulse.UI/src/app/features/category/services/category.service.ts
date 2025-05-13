@@ -12,6 +12,7 @@ import {environment} from '@env/environment';
 export class CategoryService {
   private urlBase: string = environment.urlBase;
   private urlCategories: string = `${this.urlBase}/api/category`;
+
   constructor(private http: HttpClient) {
   }
 
@@ -23,7 +24,7 @@ export class CategoryService {
     return this.http.get<Category[]>(this.urlCategories);
   }
 
-  getById(id: Category["id"]) : Observable<Category> {
+  getById(id: Category["id"]): Observable<Category> {
     return this.http.get<Category>(`${this.urlCategories}/${id}`);
   }
 

@@ -7,6 +7,7 @@ import {EditCategoryComponent} from '@category/edit-category/edit-category.compo
 import {EditBlogpostComponent} from '@blogpost/edit-blogpost/edit-blogpost.component';
 import {HomeComponent} from '@features/public/home/home.component';
 import {BlogDetailsComponent} from '@features/public/blog-detail/blog-details.component';
+import {LoginComponent} from '@features/auth/login/login.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,10 @@ export const routes: Routes = [
   {
     path: 'admin/blogposts/:id',
     component: EditBlogpostComponent
+  },
+  {
+    path: 'auth/login',
+    component: LoginComponent
   },
   {
     path: 'blog/:url',

@@ -11,7 +11,8 @@ name = 'Default'
 ```json5
 {
   "globals": {
-    "baseUrl": "https://localhost:7282"
+    "baseUrl": "https://localhost:7282",
+    "token": ""
   }
 }
 ```

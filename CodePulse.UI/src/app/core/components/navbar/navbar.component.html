@@ -10,7 +10,8 @@
         <li class="nav-item">
           <a aria-current="page" class="nav-link active" href="#">Home</a>
         </li>
-        <li class="nav-item dropdown">
+        <ng-container *ngIf="isShowAdminPanel()">
+          <li class="nav-item dropdown">
           <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
             Admin
           </a>
@@ -30,11 +31,25 @@
             </li>
           </ul>
         </li>
+        </ng-container>
       </ul>
 
       <div class="d-flex">
-        <a [routerLink]="['auth/login']" class="btn btn-primary me-2 btn-sm">Login</a>
-        <a [routerLink]="['auth/register']" class="btn btn-primary btn-sm">Register</a>
+
+        <ng-container *ngIf="user === undefined; else showLogout">
+          <a [routerLink]="['auth/login']" class="btn btn-primary me-2 btn-sm">Login</a>
+          <a [routerLink]="['auth/register']" class="btn btn-primary btn-sm">Register</a>
+        </ng-container>
+
+        <ng-template #showLogout>
+          <div class="d-flex align-items-center">
+            <span>{{ user?.email }}</span>
+            <button class="btn btn-primary ms-3 btn-sm" (click)="onLogout()">
+              Logout
+            </button>
+          </div>
+        </ng-template>
+
       </div>
     </div>
   </div>
